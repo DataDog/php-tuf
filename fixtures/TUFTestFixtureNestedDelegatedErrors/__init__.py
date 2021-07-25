@@ -1,8 +1,8 @@
 from fixtures.builder import FixtureBuilder
+import os
 
-
-def build():
-    fixture = FixtureBuilder('TUFTestFixtureNestedDelegatedErrors')\
+def build(base_dir=os.path.dirname(__file__)):
+    fixture = FixtureBuilder('TUFTestFixtureNestedDelegatedErrors', base_dir)\
         .create_target('testtarget.txt')\
         .publish(with_client=True)\
         .delegate('unclaimed', ['level_1_*.txt'])\

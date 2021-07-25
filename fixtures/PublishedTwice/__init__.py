@@ -1,7 +1,7 @@
 from fixtures.builder import FixtureBuilder
+import os
 
-
-def build(rotate_keys=None):
+def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
     """
     Generates a TUF test fixture that publishes twice -- once on the client,
     and twice on the server -- and, in between those two publications, can
@@ -11,7 +11,7 @@ def build(rotate_keys=None):
     if rotate_keys is not None:
         name += 'WithRotatedKeys_' + rotate_keys
 
-    fixture = FixtureBuilder(name).publish(with_client=True)
+    fixture = FixtureBuilder(name, base_dir).publish(with_client=True)
     if rotate_keys is not None:
         fixture.add_key(rotate_keys)\
             .revoke_key(rotate_keys, key_index=0)

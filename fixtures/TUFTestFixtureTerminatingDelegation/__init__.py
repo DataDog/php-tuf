@@ -15,10 +15,10 @@
 #
 # Roles e and d should not be evaluated.
 from fixtures.builder import FixtureBuilder
+import os
 
-
-def build():
-    FixtureBuilder('TUFTestFixtureTerminatingDelegation')\
+def build(base_dir=os.path.dirname(__file__)):
+    FixtureBuilder('TUFTestFixtureTerminatingDelegation', base_dir)\
         .publish(with_client=True)\
         .create_target('targets.txt')\
         .delegate('a', ['*.txt'])\

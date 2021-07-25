@@ -5,6 +5,7 @@ venv/
 
 /vendor/
 .idea
-composer.lock
 .DS_Store
 .phpunit.result.cache
+
+generated_fixtures/

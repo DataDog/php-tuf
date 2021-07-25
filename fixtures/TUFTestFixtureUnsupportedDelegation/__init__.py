@@ -1,9 +1,9 @@
 from fixtures.builder import FixtureBuilder
+import os
 
-
-def build():
+def build(base_dir=os.path.dirname(__file__)):
     # Set up a repo using `path_hash_prefixes`, which is currently not supported.
-    fixture = FixtureBuilder('TUFTestFixtureUnsupportedDelegation')\
+    fixture = FixtureBuilder('TUFTestFixtureUnsupportedDelegation', base_dir)\
         .create_target('testtarget.txt')\
         .publish(with_client=True)
 

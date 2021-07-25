@@ -15,9 +15,7 @@ class FixtureBuilder:
 
     def __init__(self, name, base_dir=os.path.dirname(__file__)):
         self.dir = os.path.join(base_dir, name)
-        
-        if not os.path.isdir(self.dir):
-          os.mkdir(path)
+        os.makedirs(self.dir, exist_ok=True)
 
         # The index of the next key pair (in the keys/ directory) to use when initializing
         # a role.

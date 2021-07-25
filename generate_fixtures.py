@@ -5,6 +5,8 @@ import shutil
 import glob
 import os
 
+FIXTURE_OUTPUT_DIR = "./generated_fixtures"
+
 from fixtures import (
     TUFTestFixtureSimple,
     TUFTestFixtureAttackRollback,
@@ -24,21 +26,22 @@ from fixtures import (
 
 @mock.patch('time.time', mock.MagicMock(return_value=1577836800))
 def generate_fixtures():
-    TUFTestFixtureSimple.build()
-    TUFTestFixtureAttackRollback.build()
-    TUFTestFixtureDelegated.build()
-    TUFTestFixtureNestedDelegated.build()
-    TUFTestFixtureUnsupportedDelegation.build()
-    TUFTestFixtureNestedDelegatedErrors.build()
-    TUFTestFixtureThresholdTwo.build()
-    TUFTestFixtureThresholdTwoAttack.build()
-    TUFTestFixtureTerminatingDelegation.build()
-    TUFTestFixtureTopLevelTerminating.build()
-    TUFTestFixtureNestedTerminatingNonDelegatingDelegation.build()
-    TUFTestFixture3LevelDelegation.build()
-    PublishedTwice.build()
-    PublishedTwice.build(rotate_keys='timestamp')
-    PublishedTwice.build(rotate_keys='snapshot')
+    global FIXTURE_OUTPUT_DIR
+    TUFTestFixtureSimple.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureAttackRollback.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureDelegated.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureNestedDelegated.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureUnsupportedDelegation.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureNestedDelegatedErrors.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureThresholdTwo.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureThresholdTwoAttack.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureTerminatingDelegation.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureTopLevelTerminating.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixtureNestedTerminatingNonDelegatingDelegation.build(FIXTURE_OUTPUT_DIR)
+    TUFTestFixture3LevelDelegation.build(FIXTURE_OUTPUT_DIR)
+    PublishedTwice.build(base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwice.build(rotate_keys='timestamp', base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwice.build(rotate_keys='snapshot', base_dir=FIXTURE_OUTPUT_DIR)
 
 
 # Remove all previous fixtures.

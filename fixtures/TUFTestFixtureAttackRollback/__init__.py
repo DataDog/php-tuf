@@ -1,10 +1,10 @@
 from fixtures.builder import FixtureBuilder
 
+import os
 import shutil
 
-
-def build():
-    fixture = FixtureBuilder('TUFTestFixtureAttackRollback')\
+def build(base_dir=os.path.dirname(__file__)):
+    fixture = FixtureBuilder('TUFTestFixtureAttackRollback', base_dir)\
         .create_target('testtarget.txt')\
         .publish(with_client=True)
 
