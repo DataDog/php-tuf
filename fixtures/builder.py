@@ -13,8 +13,11 @@ from dirhash import dirhash
 
 class FixtureBuilder:
 
-    def __init__(self, name):
-        self.dir = os.path.join(os.path.dirname(__file__), name)
+    def __init__(self, name, base_dir=os.path.dirname(__file__)):
+        self.dir = os.path.join(base_dir, name)
+        
+        if not os.path.isdir(self.dir):
+          os.mkdir(path)
 
         # The index of the next key pair (in the keys/ directory) to use when initializing
         # a role.
