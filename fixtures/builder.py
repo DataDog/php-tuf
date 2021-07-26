@@ -183,3 +183,8 @@ class FixtureBuilder:
             signatures.append(signature.to_dict())
 
         return signatures
+    
+    def set_version(self, role_name, key_index=0):
+        """ Sets an arbitrary value for version"""
+
+
