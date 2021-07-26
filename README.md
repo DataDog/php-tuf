@@ -25,3 +25,6 @@
        curl http://localhost:8001/targets/testtarget.txt > tuftargets/testtarget.txt
        client.py --repo http://localhost:8001 testtarget.txt
        # A 404 is expected for N.root.json unless a key has been rotated.
+
+
+The generated fixtures will be placed in a folder called "generated_fixtures".
