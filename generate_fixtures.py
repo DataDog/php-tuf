@@ -21,8 +21,9 @@ from fixtures import (
     TUFTestFixtureNestedTerminatingNonDelegatingDelegation,
     TUFTestFixture3LevelDelegation,
     PublishedTwice,
-    PublishTwiceStaleVersionNumber,
-    PublishedTwiceInvalidNewRootSignature
+    PublishedTwiceWithStaleVersion,
+    PublishedTwiceInvalidNewRootSignature,
+    PublishedTwiceInvalidOldRootSignature
 )
 
 
@@ -45,9 +46,10 @@ def generate_fixtures():
     PublishedTwice.build(rotate_keys='timestamp', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwice.build(rotate_keys='snapshot', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwice.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
-    PublishTwiceStaleVersionNumber.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceWithStaleVersion.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceInvalidNewRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
-
+    PublishedTwiceInvalidOldRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
+ 
 
 # Remove all previous fixtures.
 for f in glob.glob("fixtures/*/client"):
