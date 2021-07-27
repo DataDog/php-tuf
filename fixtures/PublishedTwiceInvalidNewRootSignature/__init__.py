@@ -18,10 +18,10 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
             .revoke_key(rotate_keys, key_index=0)
     fixture.publish()
     # Load and modify the file signature.
-    root_json_file = open(os.path.join(base_dir, name, "server/metadata/", "2.root.json"), "r")
-    root_json = json.load(root_json_file)
-    root_json['signatures'][0]['sig'] = "INVALID_SIGNATURE"
-    root_json_file.close()
-    root_json_file_for_write = open(os.path.join(base_dir, name, "server/metadata/", "2.root.json"), "wb")
-    root_json_file_for_write.write(json.dumps(root_json, indent=1,
+    root_json = None
+    with open(os.path.join(base_dir, name, "server/metadata/", "2.root.json"), "r") as root_json_file:
+      root_json = json.load(root_json_file)
+      root_json['signatures'][0]['sig'] = "000000" # insert an invalid hex value for signature.
+    with  open(os.path.join(base_dir, name, "server/metadata/", "2.root.json"), "wb") as root_json_file_for_write:
+      root_json_file_for_write.write(json.dumps(root_json, indent=1,
       separators=(',', ': '), sort_keys=True).encode('utf-8'))
