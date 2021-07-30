@@ -7,7 +7,7 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
     and twice on the server -- and, in between those two publications, can
     optionally rotate the keys of a given role.
     """
-    name = 'PublishedTwice'
+    name = 'PublishedTwiceRotateTimestampKeys'
     if rotate_keys is not None:
         name += 'WithRotatedKeys_' + rotate_keys
 
@@ -15,6 +15,5 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
     if rotate_keys is not None:
         fixture.add_key(rotate_keys)\
             .revoke_key(rotate_keys, key_index=0)
- 
-            
+    fixture.add_key("timestamp")
     fixture.publish()

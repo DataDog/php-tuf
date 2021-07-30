@@ -23,7 +23,9 @@ from fixtures import (
     PublishedTwice,
     PublishedTwiceWithStaleVersion,
     PublishedTwiceInvalidNewRootSignature,
-    PublishedTwiceInvalidOldRootSignature
+    PublishedTwiceInvalidOldRootSignature,
+    PublishedTwiceRotateTimestampKeys,
+    PublishedTwiceForwardVersion
 )
 
 
@@ -49,6 +51,8 @@ def generate_fixtures():
     PublishedTwiceWithStaleVersion.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceInvalidNewRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceInvalidOldRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceRotateTimestampKeys.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceForwardVersion.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
  
 
 # Remove all previous fixtures.
