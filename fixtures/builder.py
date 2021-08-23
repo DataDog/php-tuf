@@ -10,6 +10,10 @@ import os
 import shutil
 from dirhash import dirhash
 
+impacted_top_level_roles = {"root": ["root"], 
+                    "snapshot": ["timestamp", "snapshot", "root"],
+                    "timestamp": ["timestamp", "root"],
+                    "targets": ["targets", "snapshot", "root", "timestamp"]}
 
 class FixtureBuilder:
 
@@ -74,7 +78,15 @@ class FixtureBuilder:
         self._keys[role_name]['public'].append(public_key)
         self._keys[role_name]['private'].append(private_key)
 
-        self.repository.mark_dirty([role_name])
+        impacted_top_level_roles = {"root": ["root"], 
+                          "snapshot": ["timestamp", "snapshot", "root"],
+                          "timestamp": ["timestamp", "root"],
+                          "targets": ["targets", "snapshot", "root", "timestamp"]}
+
+        if role_name in impacted_top_level_roles:
+            self.repository.mark_dirty(impacted_top_level_roles[role_name])
+        else:
+            self.repository.mark_dirty([role_name])
 
         return self
 

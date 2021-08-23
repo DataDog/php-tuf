@@ -12,9 +12,9 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
         name += 'WithRotatedKeys_' + rotate_keys
 
     fixture = FixtureBuilder(name, base_dir).publish(with_client=True)
+    #fixture.create_target('testtarget.txt')
     if rotate_keys is not None:
         fixture.add_key(rotate_keys)\
             .revoke_key(rotate_keys, key_index=0)
  
-            
     fixture.publish()
