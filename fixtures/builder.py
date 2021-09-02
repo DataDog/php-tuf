@@ -64,6 +64,14 @@ class FixtureBuilder:
         self.add_key(role_name)
         return self
 
+    def get_threshold(self, role_name):
+       role = self._role(role_name)
+       return role.threshold
+
+    def set_threshold(self, role_name, threshold):
+       role = self._role(role_name)
+       role.threshold = threshold
+
     def add_key(self, role_name):
         """Loads a key pair from disk and assigns it to a given role."""
         (public_key, private_key) = self._import_key(role_name)
@@ -79,8 +87,8 @@ class FixtureBuilder:
         self._keys[role_name]['private'].append(private_key)
 
         impacted_top_level_roles = {"root": ["root"], 
-                          "snapshot": ["timestamp", "snapshot", "root"],
-                          "timestamp": ["timestamp", "root"],
+                          "snapshot": ["root", "snapshot", "timestamp"],
+                          "timestamp": ["root", "timestamp"],
                           "targets": ["targets", "snapshot", "root", "timestamp"]}
 
         if role_name in impacted_top_level_roles:

@@ -24,7 +24,8 @@ from fixtures import (
     PublishedTwiceWithStaleVersion,
     PublishedTwiceInvalidNewRootSignature,
     PublishedTwiceInvalidOldRootSignature,
-    PublishedTwiceForwardVersion
+    PublishedTwiceForwardVersion,
+    PublishedTwiceMultiKeys
 )
 
 
@@ -52,6 +53,15 @@ def generate_fixtures():
     PublishedTwiceForwardVersion.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceInvalidNewRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceInvalidOldRootSignature.build(rotate_keys='root', base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='root', add_key=9 , revoke_key=2, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='root', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='snapshot', add_key=9 , revoke_key=2, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='snapshot', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='timestamp', add_key=9 , revoke_key=2, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='timestamp', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='targets', add_key=9 , revoke_key=2, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+    PublishedTwiceMultiKeys.build(rotate_keys='targets', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
+
  
  
 
