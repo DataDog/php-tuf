@@ -12,10 +12,13 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
     if rotate_keys is not None:
         name += 'WithRotatedKeys_' + rotate_keys
 
-    fixture = FixtureBuilder(name, base_dir).publish(with_client=True)
+    fixture = FixtureBuilder(name, base_dir)
+    fixture.set_expiration("root")
+    fixture.publish(with_client=True)
     if rotate_keys is not None:
         fixture.add_key(rotate_keys)\
             .revoke_key(rotate_keys, key_index=0)
+    fixture.set_expiration("root")
     fixture.publish()
     # Load and modify the file signature.
     root_json = None

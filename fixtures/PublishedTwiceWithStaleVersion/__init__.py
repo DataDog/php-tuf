@@ -11,6 +11,11 @@ def build(rotate_keys=None, base_dir=os.path.dirname(__file__)):
     if rotate_keys is not None:
         name += '_' + rotate_keys
 
-    fixture = FixtureBuilder(name, base_dir).publish(with_client=True)
+    fixture = FixtureBuilder(name, base_dir)
+
+    fixture.set_expiration("root")   
+
+    fixture.publish(with_client=True)
+    
     shutil.copyfile(os.path.join(base_dir, name, "server/metadata/", "1.root.json"),
        os.path.join(base_dir, name, "server/metadata/", "2.root.json"))

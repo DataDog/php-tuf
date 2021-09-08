@@ -4,17 +4,12 @@ Contains a class to help build fixtures programmatically.
 
 from securesystemslib import formats, signer
 from tuf import repository_tool
+from datetime import datetime, timedelta
 
 import json
 import os
 import shutil
 from dirhash import dirhash
-
-impacted_top_level_roles = {"root": ["root"], 
-                    "snapshot": ["timestamp", "snapshot", "root"],
-                    "timestamp": ["timestamp", "root"],
-                    "targets": ["targets", "snapshot", "root", "timestamp"]}
-
 class FixtureBuilder:
 
     def __init__(self, name, base_dir=os.path.dirname(__file__)):
@@ -72,6 +67,12 @@ class FixtureBuilder:
        role = self._role(role_name)
        role.threshold = threshold
 
+    def set_expiration(self, role_name, expires=None):
+        LONG_EXPIRATION = datetime.now() + timedelta(days=365*10) # expire in 10 years from now.
+        expires = expires if expires is not None else LONG_EXPIRATION
+        role = self._role(role_name)
+        role.expiration = expires
+ 
     def add_key(self, role_name):
         """Loads a key pair from disk and assigns it to a given role."""
         (public_key, private_key) = self._import_key(role_name)
