@@ -10,6 +10,14 @@ import json
 import os
 import shutil
 from dirhash import dirhash
+
+class Operation:
+    def __init__(self, action, subject=None, value=None ,tag=None):
+        self.action = action
+        self.subject = subject
+        self.value = value
+        self.tag = tag
+        return 
 class FixtureBuilder:
 
     def __init__(self, name, base_dir=os.path.dirname(__file__)):

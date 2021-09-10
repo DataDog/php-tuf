@@ -1,6 +1,7 @@
 # For instructions on using this script, please see the README.
 
 from datetime import datetime, timedelta
+from fixtures.builder import Operation
 from unittest import mock
 import shutil
 import glob
@@ -29,7 +30,8 @@ from fixtures import (
     PublishedTwiceInvalidNewRootSignature,
     PublishedTwiceInvalidOldRootSignature,
     PublishedTwiceForwardVersion,
-    PublishedTwiceMultiKeys
+    PublishedTwiceMultiKeys,
+    GenerateByOperations
 )
 
 @mock.patch('time.time', mock.MagicMock(return_value=1577836800))
@@ -74,12 +76,90 @@ def generate_fixtures():
     PublishedTwiceMultiKeys.build(rotate_keys='timestamp', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceMultiKeys.build(rotate_keys='targets', add_key=9 , revoke_key=2, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
     PublishedTwiceMultiKeys.build(rotate_keys='targets', add_key=9 , revoke_key=4, threshold=4, base_dir=FIXTURE_OUTPUT_DIR)
-    PublishedNTimes.build(rotate_keys='root', publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR)
-    PublishedNTimes.build(rotate_keys='root', root_expires_start=FAST_EXPIRATION, publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR, tag="initialrootexpired")
-    PublishedNTimes.build(rotate_keys='root', root_expires_start=FAST_EXPIRATION, root_expires_end=FAST_EXPIRATION, publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR, tag="initialandlatestrootexpired")
- 
- 
-
+    #PublishedNTimes.build(rotate_keys='root', publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR)
+    #PublishedNTimes.build(rotate_keys='root', root_expires_start=FAST_EXPIRATION, publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR, tag="initialrootexpired")
+    #PublishedNTimes.build(rotate_keys='root', root_expires_start=FAST_EXPIRATION, root_expires_end=FAST_EXPIRATION, publish_n_times=5, base_dir=FIXTURE_OUTPUT_DIR, tag="initialandlatestrootexpired")
+    # Published1Time
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), Operation("publish_with_client")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_keyrotated
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="keyrotated")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_keyrotated_initialrootexpired
+    GenerateByOperations.build(operations=[Operation("set_expired", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("set_long_expiring", "root"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="keyrotated_initialrootexpired")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published3Times_keyrotated_initialrootsexpired
+    GenerateByOperations.build(operations=[Operation("set_expired", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("set_long_expiring", "root"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="keyrotated_initialrootsexpired")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published3Times_keyrotated_initialrootsexpired_clientversionis2
+    GenerateByOperations.build(operations=[Operation("set_expired", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish_with_client"),
+                                           Operation("set_long_expiring", "root"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="keyrotated_initialrootsexpired_clientversionis2")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published3Times_keyrotated_latestrootexpired
+    GenerateByOperations.build(operations=[Operation("set_expired", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="keyrotated_latestrootexpired")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_keyrotated_invalidOldRootSignature
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"),
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("set_signature", subject="root.signatures.0.sig", value="000000"),
+                                           Operation("tag", tag="keyrotated_invalidOldRootSignature")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_keyrotated_forwardRootVersion
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"),
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("add_key", "root"),
+                                           Operation("publish"),
+                                           Operation("copy", "2.root.json"),
+                                           Operation("tag", tag="keyrotated_forwardRootVersion")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_keyrotated_backwardRootVersion
+    GenerateByOperations.build(operations=[
+                                           Operation("set_long_expiring", "root"),
+                                           Operation("publish_with_client"),
+                                           Operation("copy", "2.root.json"),
+                                           Operation("tag", tag="keyrotated_backwardRootVersion")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_snapshot_keyrotated
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "snapshot"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="snapshot_keyrotated")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_timestamp_keyrotated
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "timestamp"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="timestamp_keyrotated")] , base_dir=FIXTURE_OUTPUT_DIR)
+    # Published2Times_targets_keyrotated
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                           Operation("publish_with_client"),
+                                           Operation("add_key", "targets"),
+                                           Operation("publish"),
+                                           Operation("tag", tag="targets_keyrotated")] , base_dir=FIXTURE_OUTPUT_DIR)
 # Remove all previous fixtures.
 for f in glob.glob("fixtures/*/client"):
     shutil.rmtree(f)
