@@ -136,12 +136,12 @@ def generate_fixtures():
                                            Operation("publish"),
                                            Operation("copy", "2.root.json"),
                                            Operation("tag", tag="keyrotated_forwardRootVersion")] , base_dir=FIXTURE_OUTPUT_DIR)
-    # Published2Times_keyrotated_backwardRootVersion
+    # Published1Time_backwardRootVersion
     GenerateByOperations.build(operations=[
                                            Operation("set_long_expiring", "root"),
                                            Operation("publish_with_client"),
                                            Operation("copy", "2.root.json"),
-                                           Operation("tag", tag="keyrotated_backwardRootVersion")] , base_dir=FIXTURE_OUTPUT_DIR)
+                                           Operation("tag", tag="backwardRootVersion")] , base_dir=FIXTURE_OUTPUT_DIR)
     # Published2Times_snapshot_keyrotated
     GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
                                            Operation("publish_with_client"),
@@ -160,6 +160,22 @@ def generate_fixtures():
                                            Operation("add_key", "targets"),
                                            Operation("publish"),
                                            Operation("tag", tag="targets_keyrotated")] , base_dir=FIXTURE_OUTPUT_DIR)
+    
+    # Published1Time_client_root_only
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                            Operation("publish_with_client"),
+                                            Operation("delete", "client/metadata/current/*snapshot.json"),
+                                            Operation("delete", "client/metadata/current/*timestamp.json"),
+                                            Operation("delete", "client/metadata/current/*targets.json"),
+                                            Operation("delete", "client/metadata/current/1.root.json"),
+                                            Operation("tag", tag="client_root_only")] , base_dir=FIXTURE_OUTPUT_DIR)
+
+    # Published1Time_client_no_root
+    GenerateByOperations.build(operations=[Operation("set_long_expiring", "root"), 
+                                            Operation("publish_with_client"),
+                                            Operation("delete", "client/metadata/current/*root.json"),
+                                            Operation("tag", tag="client_no_root")] , base_dir=FIXTURE_OUTPUT_DIR)
+
 # Remove all previous fixtures.
 for f in glob.glob("fixtures/*/client"):
     shutil.rmtree(f)
@@ -169,4 +185,4 @@ for f in glob.glob("fixtures/*/server"):
 for f in glob.glob("fixtures/*/hash.txt"):
     os.remove(f)
 generate_fixtures()
-generate_fixtures_mocked_time()
+#generate_fixtures_mocked_time()

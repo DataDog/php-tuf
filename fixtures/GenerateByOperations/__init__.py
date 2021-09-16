@@ -5,6 +5,7 @@ from tuf import formats
 from datetime import datetime, timedelta
 import json
 import shutil
+import fnmatch
 
 def getPublishRounds(operations):
         c = 0
@@ -33,7 +34,14 @@ def build(operations=[], base_dir=os.path.dirname(__file__), tag=None):
  
     currentVersion = 0
     name = generateName(operations)
-    fixture = FixtureBuilder(name, base_dir)   
+    fixture = FixtureBuilder(name, base_dir)
+    
+    # Set long expiration for all top-level keys by default.
+    fixture.set_expiration("root", LONG_EXPIRATION)
+    fixture.set_expiration("snapshot", LONG_EXPIRATION) 
+    fixture.set_expiration("timestamp", LONG_EXPIRATION) 
+    fixture.set_expiration("targets", LONG_EXPIRATION)    
+    
     for i in range(len(operations)):
         op = operations[i]
         if op.action == "tag":
@@ -56,6 +64,12 @@ def build(operations=[], base_dir=os.path.dirname(__file__), tag=None):
             dest = os.path.join(base_dir, name, "server/metadata/", op.subject)
             source = os.path.join(base_dir, name, "server/metadata/", str(currentVersion)+"."+".".join(op.subject.split(".")[1:]))
             shutil.move(source, dest)
+        elif op.action == "delete":
+            path = "/".join(op.subject.split("/")[:-1])
+            filename = op.subject.split("/")[-1]
+            files = fnmatch.filter(os.listdir(os.path.join(base_dir, name, path)), filename)
+            for f in files: 
+              os.remove(os.path.join(base_dir, name, path, f))
         elif op.action == "set_signature":
             root_json = None
             role = op.subject.split(".")[0]
@@ -72,3 +86,5 @@ def build(operations=[], base_dir=os.path.dirname(__file__), tag=None):
             with  open(os.path.join(file_path), "wb") as root_json_file_for_write:
                root_json_file_for_write.write(json.dumps(root_json, indent=1,
                separators=(',', ': '), sort_keys=True).encode('utf-8'))
+        else:
+            raise Exception('command {1} not found!', op.action)

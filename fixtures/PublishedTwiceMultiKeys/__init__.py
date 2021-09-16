@@ -1,5 +1,6 @@
 from fixtures.builder import FixtureBuilder
 import os
+from datetime import datetime, timedelta
 
 def build(rotate_keys=None, add_key = 0, revoke_key=0, threshold=1, base_dir=os.path.dirname(__file__)):
     """
@@ -7,12 +8,19 @@ def build(rotate_keys=None, add_key = 0, revoke_key=0, threshold=1, base_dir=os.
     with #add_key keys and sets the treshold to `threshold` -- 
     and, in between those two publications, revokes #revoke_key keys of a given role.
     """
+    LONG_EXPIRATION = datetime.now() + timedelta(days=365*10) # expire in 10 years from now.
+ 
     name = 'PublishedTwiceMultiKeys'
     if rotate_keys is not None:
         name += 'add_' + str(add_key) + "_revoke_" + str(revoke_key) + "_threshold_" + str(threshold) + "_" + rotate_keys
 
     fixture = FixtureBuilder(name, base_dir)
-    fixture.set_expiration("root")
+    
+    fixture.set_expiration("root", LONG_EXPIRATION)
+    fixture.set_expiration("snapshot", LONG_EXPIRATION) 
+    fixture.set_expiration("timestamp", LONG_EXPIRATION) 
+    fixture.set_expiration("targets", LONG_EXPIRATION) 
+    
     if rotate_keys is not None:
         # One key is already being added in the FixtureBuilder constructor.
         # Therefore, we add add_key-1 keys.
